@@ -2,7 +2,7 @@
 # define CALCXX_DRIVER_HH
 # include <string>
 # include <map>
-# include "calc++-parser.hh"
+# include "calc++-parser.hpp"
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \
   yy::calcxx_parser::symbol_type yylex (calcxx_driver& driver)

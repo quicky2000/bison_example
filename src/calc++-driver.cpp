@@ -1,5 +1,5 @@
-#include "calc++-driver.hh"
-#include "calc++-parser.hh"
+#include "calc++-driver.h"
+#include "calc++-parser.hpp"
 
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false)

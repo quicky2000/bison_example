@@ -1,5 +1,5 @@
 #include <iostream>
-#include "calc++-driver.hh"
+#include "calc++-driver.h"
 
 
 int

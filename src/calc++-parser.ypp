@@ -22,7 +22,7 @@ class calcxx_driver;
 %define parse.error verbose
 %code
 {
-# include "calc++-driver.hh"
+# include "calc++-driver.h"
 }
 %define api.token.prefix {TOK_}
 %token

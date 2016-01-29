@@ -3,8 +3,8 @@
 # include <climits>
 # include <cstdlib>
 # include <string>
-# include "calc++-driver.hh"
-# include "calc++-parser.hh"
+# include "calc++-driver.h"
+# include "calc++-parser.hpp"
 
 // Work around an incompatibility in flex (at least versions
 // 2.5.31 through 2.5.33): it generates code that does
