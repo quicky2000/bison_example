@@ -6,6 +6,7 @@
 %define api.value.type variant
 %define parse.assert
 %define api.namespace {my_parser}
+%define api.prefix {bison_prefix}
 %code requires
 {
 # include <string>
@@ -51,7 +52,7 @@ class calcxx_driver;
 #define YYLTYPE my_parser::calcxx_parser::location_type
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \
-  my_parser::calcxx_parser::symbol_type yylex (yyscan_t yyscanner,calcxx_driver& driver,my_parser::calcxx_parser::location_type * yylloc_param, my_parser::calcxx_parser::semantic_type * yylval_param)
+  my_parser::calcxx_parser::symbol_type bison_prefixlex (yyscan_t yyscanner, calcxx_driver& driver,my_parser::calcxx_parser::location_type * yylloc_param, my_parser::calcxx_parser::semantic_type * yylval_param)
 // ... and declare it for the parser's sake.
 YY_DECL;
 }

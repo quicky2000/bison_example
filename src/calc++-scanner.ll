@@ -8,6 +8,7 @@
 %}
 %option bison-bridge bison-locations reentrant
 %option noyywrap nounput batch debug noinput
+%option prefix="flex_prefix"
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
 blank [ \t]

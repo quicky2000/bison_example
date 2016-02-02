@@ -17,7 +17,7 @@ calcxx_driver::~calcxx_driver ()
 int
 calcxx_driver::parse (const std::string &f)
 {
-  yylex_init(&m_scanner);
+  flex_prefixlex_init(&m_scanner);
   file = f;
   FILE * in = fopen(f.c_str(),"r");
   if (!in)
@@ -25,12 +25,12 @@ calcxx_driver::parse (const std::string &f)
       error ("cannot open " + f + ": " + strerror(errno));
       exit (EXIT_FAILURE);
     }
-  yyset_in(in,m_scanner);
-  yyset_debug(trace_scanning,m_scanner);
+  flex_prefixset_in(in,m_scanner);
+  flex_prefixset_debug(trace_scanning,m_scanner);
   my_parser::calcxx_parser parser (m_scanner,*this,&m_loc,NULL);
   parser.set_debug_level (trace_parsing);
   int res = parser.parse ();
-  yylex_destroy(m_scanner);
+  flex_prefixlex_destroy(m_scanner);
   fclose(in);
   return res;
 }
