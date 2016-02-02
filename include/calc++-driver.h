@@ -5,7 +5,7 @@
 # include "calc++-parser.hpp"
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \
-  yy::calcxx_parser::symbol_type yylex (calcxx_driver& driver)
+  yy::calcxx_parser::symbol_type yylex (calcxx_driver& driver,yy::calcxx_parser::location_type * yylloc_param, yy::calcxx_parser::semantic_type * yylval_param)
 // ... and declare it for the parser's sake.
 YY_DECL;
 // Conducting the whole scanning and parsing of Calc++.
@@ -33,5 +33,7 @@ public:
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
+  yy::calcxx_parser::location_type m_loc;
+  yy::calcxx_parser::semantic_type m_val;
 };
 #endif // ! CALCXX_DRIVER_HH

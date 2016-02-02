@@ -17,7 +17,7 @@ calcxx_driver::parse (const std::string &f)
 {
   file = f;
   scan_begin ();
-  yy::calcxx_parser parser (*this);
+  yy::calcxx_parser parser (*this,&m_loc,NULL);
   parser.set_debug_level (trace_parsing);
   int res = parser.parse ();
   scan_end ();

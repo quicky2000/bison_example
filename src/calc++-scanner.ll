@@ -6,6 +6,9 @@
 # include "calc++-driver.h"
 # include "calc++-parser.hpp"
 
+#define YYSTYPE yy::calcxx_parser::semantic_type
+#define YYLTYPE yy::calcxx_parser::location_type
+
 // Work around an incompatibility in flex (at least versions
 // 2.5.31 through 2.5.33): it generates code that does
 // not conform to C89.  See Debian bug 333231
@@ -13,9 +16,8 @@
 # undef yywrap
 # define yywrap() 1
 
-// The location of the current token.
-static yy::location loc;
 %}
+%option bison-bridge bison-locations
 %option noyywrap nounput batch debug noinput
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
@@ -23,38 +25,38 @@ blank [ \t]
 
 %{
   // Code run each time a pattern is matched.
-  # define YY_USER_ACTION  loc.columns (yyleng);
+  # define YY_USER_ACTION  yylloc->columns (yyleng);
 %}
 
 %%
 
 %{
   // Code run each time yylex is called.
-  loc.step ();
+  yylloc->step ();
 %}
 
-{blank}+   loc.step ();
-[\n]+      loc.lines (yyleng); loc.step ();
-"-"      return yy::calcxx_parser::make_MINUS(loc);
-"+"      return yy::calcxx_parser::make_PLUS(loc);
-"*"      return yy::calcxx_parser::make_STAR(loc);
-"/"      return yy::calcxx_parser::make_SLASH(loc);
-"("      return yy::calcxx_parser::make_LPAREN(loc);
-")"      return yy::calcxx_parser::make_RPAREN(loc);
-":="     return yy::calcxx_parser::make_ASSIGN(loc);
+{blank}+   yylloc->step ();
+[\n]+      yylloc->lines (yyleng); yylloc->step ();
+"-"      return yy::calcxx_parser::make_MINUS(*yylloc);
+"+"      return yy::calcxx_parser::make_PLUS(*yylloc);
+"*"      return yy::calcxx_parser::make_STAR(*yylloc);
+"/"      return yy::calcxx_parser::make_SLASH(*yylloc);
+"("      return yy::calcxx_parser::make_LPAREN(*yylloc);
+")"      return yy::calcxx_parser::make_RPAREN(*yylloc);
+":="     return yy::calcxx_parser::make_ASSIGN(*yylloc);
 
 
 {int}      {
   errno = 0;
   long n = strtol (yytext, NULL, 10);
   if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    driver.error (loc, "integer is out of range");
-  return yy::calcxx_parser::make_NUMBER(n, loc);
+    driver.error (*yylloc, "integer is out of range");
+  return yy::calcxx_parser::make_NUMBER(n, *yylloc);
 }
 
-{id}       return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
-.          driver.error (loc, "invalid character");
-<<EOF>>    return yy::calcxx_parser::make_END(loc);
+{id}       return yy::calcxx_parser::make_IDENTIFIER(yytext, *yylloc);
+.          driver.error (*yylloc, "invalid character");
+<<EOF>>    return yy::calcxx_parser::make_END(*yylloc);
 %%
 
 void

@@ -12,6 +12,8 @@ class calcxx_driver;
 }
 // The parsing context.
 %param { calcxx_driver& driver }
+%param { calcxx_parser::location_type * loc}
+%param { calcxx_parser::semantic_type * type}
 %locations
 %initial-action
 {
