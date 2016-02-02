@@ -43,6 +43,18 @@ class calcxx_driver;
 %token <int> NUMBER "number"
 %type  <int> exp
 %printer { yyoutput << $$; } <*>;
+
+%code provides
+{
+#define YYSTYPE yy::calcxx_parser::semantic_type
+#define YYLTYPE yy::calcxx_parser::location_type
+// Tell Flex the lexer's prototype ...
+# define YY_DECL \
+  yy::calcxx_parser::symbol_type yylex (yyscan_t yyscanner,calcxx_driver& driver,yy::calcxx_parser::location_type * yylloc_param, yy::calcxx_parser::semantic_type * yylval_param)
+// ... and declare it for the parser's sake.
+YY_DECL;
+}
+
 %%
 %start unit;
 unit: assignments exp  { driver.result = $2; };

@@ -3,11 +3,6 @@
 # include <string>
 # include <map>
 # include "calc++-parser.hpp"
-// Tell Flex the lexer's prototype ...
-# define YY_DECL \
-  yy::calcxx_parser::symbol_type yylex (yyscan_t yyscanner,calcxx_driver& driver,yy::calcxx_parser::location_type * yylloc_param, yy::calcxx_parser::semantic_type * yylval_param)
-// ... and declare it for the parser's sake.
-YY_DECL;
 // Conducting the whole scanning and parsing of Calc++.
 class calcxx_driver
 {

@@ -5,17 +5,6 @@
 # include <string>
 # include "calc++-driver.h"
 # include "calc++-parser.hpp"
-
-#define YYSTYPE yy::calcxx_parser::semantic_type
-#define YYLTYPE yy::calcxx_parser::location_type
-
-// Work around an incompatibility in flex (at least versions
-// 2.5.31 through 2.5.33): it generates code that does
-// not conform to C89.  See Debian bug 333231
-// <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.
-//# undef yywrap
-//# define yywrap() 1
-
 %}
 %option bison-bridge bison-locations reentrant
 %option noyywrap nounput batch debug noinput

@@ -1,7 +1,5 @@
 #include "calc++-driver.h"
 #include "calc++-parser.hpp"
-#define YYSTYPE yy::calcxx_parser::semantic_type
-#define YYLTYPE yy::calcxx_parser::location_type
 #include "calc++-scanner.h"
 
 
