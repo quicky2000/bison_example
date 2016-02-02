@@ -5,6 +5,7 @@
 %define api.token.constructor
 %define api.value.type variant
 %define parse.assert
+%define api.namespace {my_parser}
 %code requires
 {
 # include <string>
@@ -46,11 +47,11 @@ class calcxx_driver;
 
 %code provides
 {
-#define YYSTYPE yy::calcxx_parser::semantic_type
-#define YYLTYPE yy::calcxx_parser::location_type
+#define YYSTYPE my_parser::calcxx_parser::semantic_type
+#define YYLTYPE my_parser::calcxx_parser::location_type
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \
-  yy::calcxx_parser::symbol_type yylex (yyscan_t yyscanner,calcxx_driver& driver,yy::calcxx_parser::location_type * yylloc_param, yy::calcxx_parser::semantic_type * yylval_param)
+  my_parser::calcxx_parser::symbol_type yylex (yyscan_t yyscanner,calcxx_driver& driver,my_parser::calcxx_parser::location_type * yylloc_param, my_parser::calcxx_parser::semantic_type * yylval_param)
 // ... and declare it for the parser's sake.
 YY_DECL;
 }
@@ -78,8 +79,8 @@ exp:
 | "number"      { std::swap ($$, $1); };
 %%
 void
-yy::calcxx_parser::error (const location_type& l,
-                          const std::string& m)
+my_parser::calcxx_parser::error (const location_type& l,
+				 const std::string& m)
 {
   driver.error (l, m);
 }

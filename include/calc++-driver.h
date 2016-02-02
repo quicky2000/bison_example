@@ -23,10 +23,10 @@ public:
   // Whether parser traces should be generated.
   bool trace_parsing;
   // Error handling.
-  void error (const yy::location& l, const std::string& m);
+  void error (const my_parser::location& l, const std::string& m);
   void error (const std::string& m);
   yyscan_t m_scanner;
-  yy::calcxx_parser::location_type m_loc;
-  yy::calcxx_parser::semantic_type m_val;
+  my_parser::calcxx_parser::location_type m_loc;
+  my_parser::calcxx_parser::semantic_type m_val;
 };
 #endif // ! CALCXX_DRIVER_HH

@@ -27,7 +27,7 @@ calcxx_driver::parse (const std::string &f)
     }
   yyset_in(in,m_scanner);
   yyset_debug(trace_scanning,m_scanner);
-  yy::calcxx_parser parser (m_scanner,*this,&m_loc,NULL);
+  my_parser::calcxx_parser parser (m_scanner,*this,&m_loc,NULL);
   parser.set_debug_level (trace_parsing);
   int res = parser.parse ();
   yylex_destroy(m_scanner);
@@ -36,7 +36,7 @@ calcxx_driver::parse (const std::string &f)
 }
 
 void
-calcxx_driver::error (const yy::location& l, const std::string& m)
+calcxx_driver::error (const my_parser::location& l, const std::string& m)
 {
   std::cerr << l << ": " << m << std::endl;
 }
