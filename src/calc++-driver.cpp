@@ -1,5 +1,9 @@
 #include "calc++-driver.h"
 #include "calc++-parser.hpp"
+#define YYSTYPE yy::calcxx_parser::semantic_type
+#define YYLTYPE yy::calcxx_parser::location_type
+#include "calc++-scanner.h"
+
 
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false)
@@ -15,12 +19,21 @@ calcxx_driver::~calcxx_driver ()
 int
 calcxx_driver::parse (const std::string &f)
 {
+  yylex_init(&m_scanner);
   file = f;
-  scan_begin ();
-  yy::calcxx_parser parser (*this,&m_loc,NULL);
+  FILE * in = fopen(f.c_str(),"r");
+  if (!in)
+    {
+      error ("cannot open " + f + ": " + strerror(errno));
+      exit (EXIT_FAILURE);
+    }
+  yyset_in(in,m_scanner);
+  yyset_debug(trace_scanning,m_scanner);
+  yy::calcxx_parser parser (m_scanner,*this,&m_loc,NULL);
   parser.set_debug_level (trace_parsing);
   int res = parser.parse ();
-  scan_end ();
+  yylex_destroy(m_scanner);
+  fclose(in);
   return res;
 }
 
