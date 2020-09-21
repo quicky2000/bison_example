@@ -24,6 +24,6 @@ before_install:
 
 script:
   - mkdir build; cd build; generate_makefile bison_example ; make test
-#  - cd $MY_LOCATION ; mkdir cmake_build ; cd cmake_build ; cmake $QUICKY_REPOSITORY/bison
-#  - make
+  - cd $MY_LOCATION ; mkdir cmake_build ; cd cmake_build ; cmake $QUICKY_REPOSITORY/bison_example
+  - make
 #EOF
