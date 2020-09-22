@@ -1,6 +1,7 @@
+
+#ifdef BISON_EXAMPLE_SELF_TEST
 #include <iostream>
 #include "calc++-driver.h"
-
 
 int
 main (int argc, char *argv[])
@@ -19,3 +20,4 @@ main (int argc, char *argv[])
   return res;
 }
 
+#endif // BISON_EXAMPLE_SELF_TEST
