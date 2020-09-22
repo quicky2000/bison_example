@@ -22,25 +22,46 @@ set(MY_INCLUDE_DIRECTORIES
 set(DEPENDANCY_LIST "")
 #LIST(APPEND DEPENDANCY_LIST "sha1")
 
-set(GENERATED_FILES "")
-
-add_custom_command(OUTPUT calc++-parser.hpp calc++-parser.cpp location.hh position.hh stack.hh
-                   COMMAND bison -o calc++-parser.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/calc++-parser.ypp
-                   DEPENDS src/calc++-parser.ypp
-                   COMMENT "Generate Bison parser"
-                  )
-set(GENERATED_FILES ${GENERATED_FILES} calc++-parser.hpp calc++-parser.cpp location.hh position.hh stack.hh)
-
-add_custom_command(OUTPUT calc++-scanner.cpp calc++-scanner.h
-                   COMMAND flex -ocalc++-scanner.cpp --header-file=calc++-scanner.h ${CMAKE_CURRENT_SOURCE_DIR}/src/calc++-scanner.ll
-                   DEPENDS src/calc++-scanner.ll
-                   COMMENT "Generate Flex lexer"
-                  )
-set(GENERATED_FILES ${GENERATED_FILES} calc++-scanner.cpp calc++-scanner.h)
-
 #------------------------------
 #- Generic part
 #------------------------------
+set(GENERATED_FILES "")
+
+# Search for Bison files
+foreach(SOURCE_FILE IN ITEMS ${MY_SOURCE_FILES})
+    if(${SOURCE_FILE} MATCHES "(.*\).ypp$")
+        get_filename_component(BISON_NAME ${CMAKE_MATCH_1} NAME)
+        message("Bison parser detected: " ${BISON_NAME})
+        set(BISON_OUTPUT ${BISON_NAME}.hpp ${BISON_NAME}.cpp)
+        string(FIND "$GENERATED_FILES" location.hh GENERIC_BISON_OK)
+        if(GENERIC_BISON_OK EQUAL -1)
+            set(BISON_OUTPUT ${BISON_OUTPUT} location.hh position.hh stack.hh)
+            message("Add generic bison files")
+        endif()
+        add_custom_command(OUTPUT ${BISON_OUTPUT}
+                           COMMAND bison -o ${BISON_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCE_FILE}
+                           DEPENDS ${SOURCE_FILE}
+                           COMMENT "Generate Bison parser for \"${SOURCE_FILE}\""
+                           )
+        set(GENERATED_FILES ${GENERATED_FILES} ${BISON_OUTPUT})
+    endif()
+endforeach(SOURCE_FILE)
+
+#Search for flex files
+foreach(SOURCE_FILE IN ITEMS ${MY_SOURCE_FILES})
+    if(${SOURCE_FILE} MATCHES "(.*\).ll$")
+        get_filename_component(FLEX_NAME ${CMAKE_MATCH_1} NAME)
+        message("Flex lexer detected: " ${FLEX_NAME})
+        set(FLEX_OUTPUT ${FLEX_NAME}.h ${FLEX_NAME}.cpp)
+        add_custom_command(OUTPUT ${FLEX_OUTPUT}
+                           COMMAND flex -o${FLEX_NAME}.cpp --header-file=${FLEX_NAME}.h ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCE_FILE}
+                           DEPENDS ${SOURCE_FILE}
+                           COMMENT "Generate Flex lexer for \"${SOURCE_FILE}\""
+                           )
+        set(GENERATED_FILES ${GENERATED_FILES} ${FLEX_OUTPUT})
+    endif()
+endforeach(SOURCE_FILE)
+
 set(DEPENDANCY_OBJECTS "")
 set(LINKED_LIBRARIES "")
 #iterate on dependancies
